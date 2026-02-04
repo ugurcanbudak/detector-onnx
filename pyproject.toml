@@ -1,0 +1,18 @@
+[project]
+name = "OD-inference"
+version = "0.1.0"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+od-infer = "od.cli:main"
+od-infer-ci = "od_inference_ci.cli:main"

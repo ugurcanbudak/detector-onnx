@@ -1,0 +1,11 @@
+torch
+torchvision
+numpy
+pillow
+pytest
+ruff
+onnx
+onnxscript
+onnxruntime
+onnx
+onnxruntime
