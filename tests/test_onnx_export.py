@@ -1,8 +1,8 @@
 import os
 import numpy as np
 from PIL import Image
-from od_inference_ci.export_onnx import export_detector_onnx
-from od_inference_ci.onnx_infer import ort_predict
+from od.export_onnx import export_detector_onnx
+from od.onnx_infer import ort_predict
 
 def test_onnx_export_and_run(tmp_path):
     # Keep CI lightweight: do NOT download pretrained weights
@@ -12,8 +12,13 @@ def test_onnx_export_and_run(tmp_path):
     export_detector_onnx(str(onnx_path), h=320, w=320)
 
     img = Image.fromarray((np.random.rand(320, 320, 3) * 255).astype("uint8"), mode="RGB")
-    boxes, scores, labels = ort_predict(str(onnx_path), img)
+    dets = ort_predict(str(onnx_path), img)
 
-    assert boxes.ndim == 2 and boxes.shape[1] == 4
-    assert scores.ndim == 1
-    assert labels.ndim == 1
+    # Check that we get a list of detections (could be empty)
+    assert isinstance(dets, list)
+    # If we have detections, verify their structure
+    for det in dets:
+        assert hasattr(det, 'box_xyxy')
+        assert hasattr(det, 'score')
+        assert hasattr(det, 'label')
+        assert len(det.box_xyxy) == 4
