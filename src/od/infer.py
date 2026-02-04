@@ -53,12 +53,12 @@ def predict(
         boxes, labels, scores = boxes[:top_k], labels[:top_k], scores[:top_k]
 
     dets: List[Detection] = []
-    for b, l, s in zip(boxes, labels, scores):
+    for b, label, s in zip(boxes, labels, scores):
         dets.append(
             Detection(
                 box_xyxy=(float(b[0]), float(b[1]), float(b[2]), float(b[3])),
                 score=float(s),
-                label=int(l),
+                label=int(label),
             )
         )
     return dets
